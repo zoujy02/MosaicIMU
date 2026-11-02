@@ -1,0 +1,10 @@
+torch>=2.0.0,<2.5
+torchvision>=0.15,<0.20
+numpy>=1.23,<2.0
+scipy>=1.10
+PyYAML>=6.0
+tqdm>=4.65
+numba>=0.58
+matplotlib>=3.7
+seaborn>=0.12
+scikit-learn>=1.3

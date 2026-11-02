@@ -1,0 +1,59 @@
+data:
+  train_dir: "data/data_baseline/train"
+  val_dir: "data/data_baseline/val"
+  window_size: 500
+  step_size: 250
+
+pretrain_training:
+  batch_size: 128
+  epochs: 100
+  lr: 0.001
+  eta_min: 0.00001
+  patience: 15
+  stage_switch_epoch: 50
+  router_temperature: 3.0
+  resume_weights: null
+  # Released pretrained checkpoint (best E12 full-training weights)
+  ckpt_best: "best_moe.pth"
+  ckpt_last: "last_moe.pth"
+
+weight_tune_training:
+  batch_size: 256
+  epochs: 100
+  lr: 0.001
+  eta_min: 0.00001
+  router_temperature: 4.0
+  periodic_ckpt_every: 5
+  prior_warmup_start: 15
+  prior_warmup_end: 30
+  prior_max_weight: 1.0
+  router_prior: [0.05, 0.05, 0.85, 0.05]
+
+model:
+  in_channels: 6
+  context_dim: 128
+  expert_dim: 64
+  dropout_rate: 0.1
+
+loss:
+  lambda_ce: 0.1
+  alpha_orth: 0.05
+  lambda_vel: 10.0
+  lambda_nll: 0.1
+  lambda_disp: 10.0
+  lambda_int: 10.0
+  imu_sample_rate_hz: 200.0
+  variance_detach_epochs: 10
+  router_log_eps: 1.0e-8
+  grad_clip_norm: 5.0
+  carrier_soft_priors:
+    - [0.85, 0.05, 0.05, 0.05]
+    - [0.05, 0.85, 0.05, 0.05]
+    - [0.05, 0.05, 0.85, 0.05]
+    - [0.01, 0.01, 0.01, 0.97]
+
+weight_tune_paths:
+  # Use the released full-training weights (E12) as the pretrain init
+  pretrained_weights: "checkpoint/best_moe.pth"
+  data_dir: "data/weight_tune/train"
+  val_dir: "data/weight_tune/val"

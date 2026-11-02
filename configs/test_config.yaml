@@ -1,0 +1,37 @@
+base:
+  # Released full-training weights (best E12)
+  weights: "checkpoint/best_moe.pth"
+  weight_tune_weights: "checkpoint/best_weight_tune.pth"
+  output_dir: "test_results_visualizations"
+  seq_len: 500
+  dt: 0.005
+  # dataset: only <test_data_root>/{car,quadrupedal,pedestrian,drone}/*.npz
+  # router: ignore folder names; classify each npz (recursive) then use that carrier's config
+  carrier_source: dataset
+  test_data_root: "data/data_baseline/test"
+  pretrain_eval_router_temperature: 3.0
+
+mode_carrier_groups:
+  pretrain: [car, pedestrian, quadrupedal, drone]
+  weight_tune: [car, pedestrian, quadrupedal, drone, weight_robot]
+
+carriers:
+  car:
+    data_dir: "data/data_baseline/test/car"
+    msckf_update_period_sec: 0.5
+
+  quadrupedal:
+    data_dir: "data/data_baseline/test/quadrupedal"
+    msckf_update_period_sec: 0.25
+
+  pedestrian:
+    data_dir: "data/data_baseline/test/pedestrian"
+    msckf_update_period_sec: 0.25
+
+  drone:
+    data_dir: "data/data_baseline/test/drone"
+    msckf_update_period_sec: 0.025
+
+  weight_robot:
+    data_dir: "data/weight_tune/test"
+    msckf_update_period_sec: 0.5
